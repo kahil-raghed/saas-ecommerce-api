@@ -4,6 +4,7 @@ import org.jose4j.jws.AlgorithmIdentifiers
 import org.jose4j.jws.JsonWebSignature
 import org.jose4j.jwt.JwtClaims
 import org.jose4j.jwt.consumer.InvalidJwtException
+import org.jose4j.jwt.consumer.JwtConsumer
 import org.jose4j.jwt.consumer.JwtConsumerBuilder
 import org.jose4j.jwt.consumer.JwtContext
 
@@ -14,11 +15,11 @@ import org.springframework.stereotype.Component
 @Component
 class JwtService {
 
-    final val issuer = "test"
-    final val key = HmacKey("password".toByteArray())
+    private final val issuer = "test"
+    private final val key = HmacKey("password".toByteArray())
 
 
-    val jwtConsumer = JwtConsumerBuilder()
+    val jwtConsumer: JwtConsumer = JwtConsumerBuilder()
         .setExpectedIssuer(issuer)
         .setVerificationKey(key)
         .build()
@@ -32,7 +33,7 @@ class JwtService {
 
         val jws = JsonWebSignature()
         jws.payload = claims.toJson()
-        jws.key = key;
+        jws.key = key
         jws.algorithmHeaderValue = AlgorithmIdentifiers.HMAC_SHA256
 
         return jws.compactSerialization
